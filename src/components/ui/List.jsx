@@ -1,43 +1,36 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 
-export default function List({ list, handleDeleteItem, handleChangeItem }) {
+export default function List({ state, dispatch }) {
   return (
     <ul className="flex flex-col gap-2">
-      {list.map((l) => {
-        return (
-          <Item
-            key={l.id}
-            list={l}
-            handleDeleteItem={handleDeleteItem}
-            handleChangeItem={handleChangeItem}
-          />
-        );
+      {state.list.map((item) => {
+        return <Item key={item.id} item={item} dispatch={dispatch} />;
       })}
     </ul>
   );
 }
 
-function Item({ list, handleDeleteItem, handleChangeItem }) {
+function Item({ item, dispatch }) {
   return (
     <li>
       <div className="flex justify-between items-center">
         <Checkbox
           id="terms"
-          defaultChecked={list.packed}
+          defaultChecked={item.packed}
           onClick={() => {
-            handleChangeItem(list);
+            dispatch({ type: "CHANGE", payload: item });
           }}
         />
         <label
           htmlFor="terms"
           className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
         >
-          {list.label}
+          {item.label}
         </label>
         <Button
           onClick={() => {
-            handleDeleteItem(list.id);
+            dispatch({ type: "DELETE", payload: item.id });
           }}
         >
           Delete
